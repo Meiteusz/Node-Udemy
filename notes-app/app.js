@@ -1,45 +1,33 @@
 const chalk = require('chalk')
+const { describe } = require('yargs')
 const yargs = require('yargs')
 
-//const getNotes = require('./notes') 
-//const addNotes = require('./notes') 
-//const removeNotes = require('./notes') 
-
-const command = process.argv[2];
-
-//Define my own themes
-const error = chalk.bold.inverse.red
-const warning = chalk.keyword('orange').inverse;
-
-const errorMessage = chalk.bold.red
-const warningMessage = chalk.keyword('orange')
-//--------------------
-
-//Printing with color
-//console.log(error('TEST ERROR'))
-//console.log(warning('TEST WARNING'))
-//console.log(errorMessage('TEST ERROR Message'))
-//console.log(warningMessage('TEST WARNING Message'))
-
-
-//if(command === 'add'){
-//    const response = addNotes(' test')
-//    console.log(response)
-//}else if(command === 'read'){
-//    console.log(getNotes())
-//}else if(command === 'remove'){
-//    console.log('processing...remove notes')
-//}
+const notesClass = require('./notes')
 
 yargs.version('1.1.0')
 
 // add, remove, read, list notes
 
+var notes = new notesClass()
+
 yargs.command({
     command: 'add',
     describe: '- Add a new note',
-    handler: function () {
-        console.log('adding a note')
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        },
+        body: {
+            describe: 'body of note',
+            demandOption: true,
+            type: 'string'  
+        }
+    },
+    handler: (argv) => {
+        console.log(notes.addNotes(new Date().toString("dd/MM/yyyy") + "\n" + "Title: " + 
+        argv.title + " - Body: " + argv.body))
     }
 })
 
@@ -47,7 +35,7 @@ yargs.command({
     command: 'delete',
     describe: '- delete all notes',
     handler: function () {
-        console.log('removing a note')
+        console.log(notes.removeNotes())
     }
 })
 
@@ -55,7 +43,7 @@ yargs.command({
     command: 'list',
     describe: '- list the notes',
     handler: function () {
-        console.log('notes lists')
+        console.log(notes.getNotes())
     }
 })
 
@@ -67,6 +55,4 @@ yargs.command({
     }
 })
 
-console.log(yargs.argv)
-
-// tirar os console.logs e colocar para roldar os métodos de verdade
+yargs.parse()
