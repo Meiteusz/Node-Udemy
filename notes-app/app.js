@@ -1,19 +1,58 @@
 const chalk = require('chalk')
-const notes = require('./notes')
+const { describe } = require('yargs')
+const yargs = require('yargs')
 
-//Define my own themes
-const error = chalk.bold.inverse.red
-const warning = chalk.keyword('orange').inverse;
+const notesClass = require('./notes')
 
-const errorMessage = chalk.bold.red
-const warningMessage = chalk.keyword('orange')
-//--------------------
+yargs.version('1.1.0')
 
-var myNotes = 'Your Notes...'
-console.log(notes(myNotes))
+// add, remove, read, list notes
 
-//Printing with color
-console.log(error('TEST ERROR'))
-console.log(warning('TEST WARNING'))
-console.log(errorMessage('TEST ERROR Message'))
-console.log(warningMessage('TEST WARNING Message'))
+var notes = new notesClass()
+
+yargs.command({
+    command: 'add',
+    describe: '- Add a new note',
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        },
+        body: {
+            describe: 'body of note',
+            demandOption: true,
+            type: 'string'  
+        }
+    },
+    handler: (argv) => {
+        console.log(notes.addNotes(new Date().toString("dd/MM/yyyy") + "\n" + "Title: " + 
+        argv.title + " - Body: " + argv.body))
+    }
+})
+
+yargs.command({
+    command: 'delete',
+    describe: '- delete all notes',
+    handler: function () {
+        console.log(notes.removeNotes())
+    }
+})
+
+yargs.command({
+    command: 'list',
+    describe: '- list the notes',
+    handler: function () {
+        console.log(notes.getNotes())
+    }
+})
+
+yargs.command({
+    command: 'read',
+    describe: '- read the notes',
+    handler: function () {
+        console.log('note read')
+    }
+})
+
+yargs.parse()
