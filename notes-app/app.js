@@ -12,7 +12,7 @@ var notes = new notesClass()
 
 yargs.command({
     command: 'add',
-    describe: '- Add a new note',
+    describe: '- Add a new note = --title="example" --body="my body"',
     builder: {
         title: {
             describe: 'Note title',
@@ -26,8 +26,8 @@ yargs.command({
         }
     },
     handler: (argv) => {
-        console.log(notes.addNotes(new Date().toString("dd/MM/yyyy") + "\n" + "Title: " + 
-        argv.title + " - Body: " + argv.body))
+        const noteFinal = "\nTitle: " + argv.title + " - Body: " + argv.body + "\t" + new Date().toString("dd/MM/yyyy") 
+        console.log(notes.addNotes(noteFinal))
     }
 })
 

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "dependencies": "^0.0.1",
+    "yargs": "^17.2.1"
+  }
+}
